@@ -27,3 +27,12 @@ LOWER='7' \
 UPPER='365' \
 npm start
 ```
+
+## Troubleshooting
+1. On Arm Linux, add executablePath param pointing to chromium binary. For example, on Raspberry Pi OS, 
+```
+    const browser = await puppeteer.launch({
+        ...,
+        executablePath: '/usr/bin/chromium-browser'
+    });
+```
