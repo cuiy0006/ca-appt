@@ -54,30 +54,38 @@ async function drainTheSwamp() {
         const url = util.format(protoLink, id);
         const resJsonStr = await page.evaluate(async (url) => {
             const response = await fetch(url);
+            if (response.status !== 200) {
+                console.error(`[Error] get response code: ${response.status}, response text: ${response.text()}`);
+                return '[]';
+            }
             const jsonStr = await response.text();
             return jsonStr;
         }, url);
 
-        const resJson = JSON.parse(resJsonStr);
-
-        for (const dateObject of resJson) {
-            const d = moment(dateObject['date']);
-            const lowerDate = moment().add(lower, 'months');
-            const upperDate = moment().add(upper, 'months');
-
-            if (lowerDate < d && d < upperDate) {
-                console.log(`NOTIFICATION: [${name}] - [${d.format()}]`);
-                await new Promise((resolve, reject) => {
-                    player.play('notification.mp3', function(err){
-                        if (err === null) {
-                            resolve();
-                        } else {
-                            reject(err);
-                        }
+        try {
+            const resJson = JSON.parse(resJsonStr);
+            for (const dateObject of resJson) {
+                const d = moment(dateObject['date']);
+                const lowerDate = moment().add(lower, 'months');
+                const upperDate = moment().add(upper, 'months');
+    
+                if (lowerDate < d && d < upperDate) {
+                    console.log(`NOTIFICATION: [${name}] - [${d.format()}]`);
+                    await new Promise((resolve, reject) => {
+                        player.play('notification.mp3', function(err){
+                            if (err === null) {
+                                resolve();
+                            } else {
+                                reject(err);
+                            }
+                        });
                     });
-                });
-                
+                    
+                }
             }
+        } catch (error) {
+            console.error(error);
+            console.error(`[Error] caused by json string: ${resJsonStr}`);
         }
     }
 
