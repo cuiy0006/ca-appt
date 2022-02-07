@@ -13,8 +13,8 @@ npm install
 EMAIL='[Your Account Email]' \
 PASSWORD='[Your Account Password]' \
 INTERVAL='[Crawl Interval in Minute]' \
-LOWER='[Notify if found at least n Month from Now]' \
-UPPER='[Notify if found at most n Month from Now]' \
+LOWER='[Notify if found at least n days from now]' \
+UPPER='[Notify if found at most n days from now]' \
 npm start
 ```
 
@@ -23,7 +23,7 @@ Example:
 EMAIL='1234567@gmail.com' \
 PASSWORD='apasswordisapassowrd' \
 INTERVAL='1' \
-LOWER='1' \
-UPPER='13' \
+LOWER='7' \
+UPPER='365' \
 npm start
 ```

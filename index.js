@@ -17,13 +17,15 @@ protoLink = 'https://ais.usvisa-info.com/en-ca/niv/schedule/37002109/appointment
 
 const email = process.env.EMAIL;
 const password = process.env.PASSWORD;
-const interval = parseInt(process.env.INTERVAL || '30') * 60 * 1000;
-const lower = parseInt(process.env.LOWER || '1');
-const upper = parseInt(process.env.UPPER || '6');
+const interval_minute = parseInt(process.env.INTERVAL || '30');
+const interval = interval_minute * 60 * 1000;
+const lower = parseInt(process.env.LOWER || '7');
+const upper = parseInt(process.env.UPPER || '365');
 
 async function drainTheSwamp() {
     const startTime = moment();
     console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Start processing at [${startTime.format()}] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`);
+    console.log(`Looking for available appts at range (${lower}, ${upper}) days from today(exclusive), every ${interval_minute} minutes`);
 
     const browser = await puppeteer.launch({
         headless: true,
@@ -66,8 +68,8 @@ async function drainTheSwamp() {
             const resJson = JSON.parse(resJsonStr);
             for (const dateObject of resJson) {
                 const d = moment(dateObject['date']);
-                const lowerDate = moment().add(lower, 'months');
-                const upperDate = moment().add(upper, 'months');
+                const lowerDate = moment().add(lower, 'days');
+                const upperDate = moment().add(upper, 'days');
     
                 if (lowerDate < d && d < upperDate) {
                     console.log(`NOTIFICATION: [${name}] - [${d.format()}]`);
