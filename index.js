@@ -88,14 +88,14 @@ async function drainTheSwamp() {
                     }
                 }
             } catch (error) {
-                console.error(error);
+                console.error(`[ERROR] ${error}`);
                 console.error(`[Error] caused by json string: ${resJsonStr}`);
             }
         }
 
         await browser.close();
     } catch (error) {
-        console.log(`[ERROR] ${error}`);
+        console.error(`[ERROR] ${error}`);
     }
 
     const endTime = moment();
