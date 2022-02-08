@@ -59,7 +59,7 @@ async function drainTheSwamp() {
             const resJsonStr = await page.evaluate(async (url) => {
                 const response = await fetch(url);
                 if (response.status !== 200) {
-                    console.error(`[Error] get response code: ${response.status}, response text: ${response.text()}`);
+                    console.error(`[ERROR] get response code: ${response.status}, response text: ${response.text()}`);
                     return '[]';
                 }
                 const jsonStr = await response.text();
@@ -89,7 +89,7 @@ async function drainTheSwamp() {
                 }
             } catch (error) {
                 console.error(`[ERROR] ${error}`);
-                console.error(`[Error] caused by json string: ${resJsonStr}`);
+                console.error(`[ERROR] caused by json string: ${resJsonStr}`);
             }
         }
 
