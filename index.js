@@ -95,7 +95,7 @@ async function drainTheSwamp() {
 
         await browser.close();
     } catch (error) {
-        console.log(`[ERROR] ${e}`);
+        console.log(`[ERROR] ${error}`);
     }
 
     const endTime = moment();
