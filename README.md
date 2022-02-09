@@ -20,7 +20,7 @@ PASSWORD='[Your Account Password]' \
 INTERVAL='[Crawl Interval in Minute]' \
 LOWER='[Notify if found at least n days from now]' \
 UPPER='[Notify if found at most n days from now]' \
-SENDER='[Sender email]' \
+SENDER='[Sender email (outlook)]' \
 SENDERPSWD='[Sender email account password]' \
 RECEIVERS='[List of receiver emails]' \
 npm start
@@ -33,7 +33,7 @@ PASSWORD='apasswordisapassowrd' \
 INTERVAL='1' \
 LOWER='7' \
 UPPER='365' \
-SENDER='12345@gmail.com' \
+SENDER='12345@outlook.com' \
 SENDERPSWD='********' \
 RECEIVERS='["54321@gmail.com","qwert@gmail.com"]' \
 npm start
