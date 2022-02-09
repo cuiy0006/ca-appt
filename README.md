@@ -25,6 +25,9 @@ PASSWORD='apasswordisapassowrd' \
 INTERVAL='1' \
 LOWER='7' \
 UPPER='365' \
+SENDER='12345@gmail.com' \
+SENDERPSWD='********' \
+RECEIVERS='["54321@gmail.com","qwert@gmail.com"]' \
 npm start
 ```
 

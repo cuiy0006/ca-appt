@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const util = require('util');
 const moment = require('moment');
-const player = require('play-sound')(opts = {})
+const notif = require('./notification.js');
 
 const locationIdToName = {
     '89': 'Calgary',
@@ -22,13 +22,19 @@ const interval = intervalMinute * 60 * 1000;
 const lower = parseInt(process.env.LOWER || '7');
 const upper = parseInt(process.env.UPPER || '365');
 
+const sender = process.env.SENDER;
+const senderPswd = process.env.SENDERPSWD;
+const receivers = JSON.parse(process.env.RECEIVERS);
+const emailNotif = new notif.EmailNotification(sender, senderPswd, receivers);
+
 async function drainTheSwamp() {
     const startTime = moment();
-    console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Start processing at [${startTime.format()}] @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`);
+    console.log(`------------------------------------- Start processing at [${startTime.format()}]`)
     console.log(`Looking for available appts at range (${lower}, ${upper}) days from today(exclusive), every ${intervalMinute} minutes`);
 
+    let browser;
     try {
-        const browser = await puppeteer.launch({
+        browser = await puppeteer.launch({
             headless: true,
             args:[
             '--start-maximized'
@@ -52,10 +58,9 @@ async function drainTheSwamp() {
             waitUntil: 'networkidle0',
         });
 
-        for (const [id, name] of Object.entries(locationIdToName)) {
-            // console.log(`-------------------- Processing Location [${name}] --------------------`)
+        for (const [locationId, locationName] of Object.entries(locationIdToName)) {
 
-            const url = util.format(protoLink, id);
+            const url = util.format(protoLink, locationId);
             const resJsonStr = await page.evaluate(async (url) => {
                 const response = await fetch(url);
                 if (response.status !== 200) {
@@ -68,39 +73,52 @@ async function drainTheSwamp() {
 
             try {
                 const resJson = JSON.parse(resJsonStr);
+                let surpriseList = [];
                 for (const dateObject of resJson) {
                     const d = moment(dateObject['date']);
                     const lowerDate = moment().add(lower, 'days');
                     const upperDate = moment().add(upper, 'days');
         
                     if (lowerDate < d && d < upperDate) {
-                        console.log(`NOTIFICATION: [${name}] - [${d.format()}]`);
-                        await new Promise((resolve, reject) => {
-                            player.play('notification.mp3', function(err){
-                                if (err === null) {
-                                    resolve();
-                                } else {
-                                    reject(err);
-                                }
-                            });
+                        surpriseList.push({
+                            'location': locationName,
+                            'date': dateObject['date']
                         });
-                        
                     }
                 }
+
+                if (surpriseList.length !== 0) {
+                    for (const surprise of surpriseList) {
+                        notif.consoleNotify(surprise.location, surprise.date);
+                    }
+                    notif.soundNotify().then(() => {});
+                    emailNotif
+                        .notify(JSON.stringify(surpriseList))
+                        .then(function(result, error) {
+                            if (error) {
+                                console.error(`[ERROR] ${error}`);
+                            } else {
+                                console.log('Email sent: ' + result.response);
+                            }
+                        });
+                }
+
             } catch (error) {
                 console.error(`[ERROR] ${error}`);
                 console.error(`[ERROR] caused by json string: ${resJsonStr}`);
             }
         }
-
-        await browser.close();
     } catch (error) {
         console.error(`[ERROR] ${error}`);
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
     }
 
     const endTime = moment();
     const durationSec = moment.duration(endTime.diff(startTime)).asSeconds();
-    console.log(`@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ End processing at [${endTime.format()}], takes ${durationSec}s @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@`);
+    console.log(`------------------------------------- End processing at [${endTime.format()}], takes ${durationSec}s`);
     console.log('');
 
     setTimeout(drainTheSwamp, interval);
