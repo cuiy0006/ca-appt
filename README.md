@@ -15,6 +15,9 @@ PASSWORD='[Your Account Password]' \
 INTERVAL='[Crawl Interval in Minute]' \
 LOWER='[Notify if found at least n days from now]' \
 UPPER='[Notify if found at most n days from now]' \
+SENDER='[Sender email]' \
+SENDERPSWD='[Sender email account password]' \
+RECEIVERS='[List of receiver emails]' \
 npm start
 ```
 
