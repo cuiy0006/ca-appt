@@ -1,6 +1,11 @@
 ## Description
-Get available slot from ais.usvisa-info.com,
-Notify by printing info on console and playing a notification sound.
+Get available slots from ais.usvisa-info.com  
+Notify by  
+<ol>
+    <li>Console print</li>
+    <li>Play a notif sound</li>
+    <li>Send emails</li>
+</ol>
 
 ## Build
 npm version: v16.13.2
