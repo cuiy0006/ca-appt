@@ -35,11 +35,12 @@ async function drainTheSwamp() {
     let browser;
     try {
         browser = await puppeteer.launch({
-            headless: false,
+            headless: true,
             args:[
             '--start-maximized'
             ],
-            executablePath: '/usr/bin/chromium-browser'
+            executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' // MACOS chrome
+            // executablePath: '/usr/bin/chromium-browser' // Raspberry Pi chromium
         });
         const page = await browser.newPage();
 
