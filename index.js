@@ -51,6 +51,7 @@ async function drainTheSwamp() {
             console.error(`[ERROR] Retrying after getting page url: ${page.url()}`);
             retry -= 1;
             await sleep(10000);
+            await gotoSignInPage(page);
             await login(page);
         }
         if (retry === 0) {
