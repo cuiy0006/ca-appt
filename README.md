@@ -1,5 +1,5 @@
 ## Description
-**_NOTE:_**  Use Chrome if possible, Chrome is more stable than Chromium
+**_NOTE:_**  Use Chrome if possible, Chrome is more stable than Chromium   
 Get available slots from ais.usvisa-info.com  
 Notify by  
 <ol>
