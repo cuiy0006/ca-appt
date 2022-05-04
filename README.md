@@ -9,7 +9,7 @@ Notify by
 </ol>
 
 ## Build
-npm version: v16.13.2
+node version: v16.13.2
 ```
 npm install
 ```
