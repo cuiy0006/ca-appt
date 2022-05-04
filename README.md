@@ -16,6 +16,7 @@ npm install
 
 ## Run
 ```
+QUERYNO='[Query NO, ask me if you don't know how to get it]' \
 EMAIL='[Your Account Email]' \
 PASSWORD='[Your Account Password]' \
 INTERVAL='[Crawl Interval in Minute]' \
@@ -29,6 +30,7 @@ npm start
 
 Example:
 ```
+QUERYNO='37002109' \
 EMAIL='1234567@gmail.com' \
 PASSWORD='apasswordisapassowrd' \
 INTERVAL='1' \

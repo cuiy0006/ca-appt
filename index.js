@@ -13,8 +13,10 @@ const locationIdToName = {
     '95': 'Vancouver',
 };
 
-protoLink = 'https://ais.usvisa-info.com/en-ca/niv/schedule/37002109/appointment/days/%s.json?appointments[expedite]=false';
 
+protoLink = 'https://ais.usvisa-info.com/en-ca/niv/schedule/%s/appointment/days/%s.json?appointments[expedite]=false';
+
+const queryNumber = process.env.QUERYNO;
 const email = process.env.EMAIL;
 const password = process.env.PASSWORD;
 const intervalMinute = parseInt(process.env.INTERVAL || '30');
@@ -35,7 +37,7 @@ async function drainTheSwamp() {
     let browser;
     try {
         browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             args:[
             '--start-maximized'
             ],
@@ -107,7 +109,7 @@ async function getSurprises(page) {
     let surpriseList = [];
     for (const [locationId, locationName] of Object.entries(locationIdToName)) {
 
-        const url = util.format(protoLink, locationId);
+        const url = util.format(protoLink, queryNumber, locationId);
         const resJsonStr = await page.evaluate(async (url) => {
             const response = await fetch(url);
             if (response.status !== 200) {
